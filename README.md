@@ -1,2 +1,2 @@
 # node-CityPeopleAPI
-API em Node com Typescript, TDD, Jest, Postgres, SQLite, etc.
+API em Node Express com Typescript, TDD, Jest, Postgres, SQLite, etc.
