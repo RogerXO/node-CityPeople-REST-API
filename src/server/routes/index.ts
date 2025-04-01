@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes"
 
 const router = Router();
 
-router.get("/", (_, res) => {
+router.get("/", (req, res) => {
   return res.send("Hello world");
 });
 
