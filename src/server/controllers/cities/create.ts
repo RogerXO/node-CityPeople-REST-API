@@ -14,18 +14,18 @@ export async function create(req: Request<{}, {}, ICity>, res: Response) {
     validatedData = await bodyValidation.validate(req.body, {
       abortEarly: false,
     });
-  } catch (error) {
-    const yupError = error as yup.ValidationError;
-    const validationErrors: Record<string, string> = {};
+  } catch (err) {
+    const yupError = err as yup.ValidationError;
+    const errors: Record<string, string> = {};
 
-    yupError.inner.forEach((err) => {
-      if (!err.path) return;
+    yupError.inner.forEach((error) => {
+      if (!error.path) return;
 
-      validationErrors[err.path] = err.message;
+      errors[error.path] = error.message;
     });
 
     return res.status(StatusCodes.BAD_REQUEST).json({
-      errors: validationErrors,
+      errors: errors,
     });
   }
 
