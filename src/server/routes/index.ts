@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes"
+import { StatusCodes } from "http-status-codes";
 
 const router = Router();
 
@@ -24,6 +24,24 @@ router.delete("/params/:id", (req, res) => {
 
   return res.json(req.body);
 });
+
+router.post(
+  "/middleware",
+  (req, res, next) => {
+    if (false) return res.json(req.body);
+    else return next();
+  },
+  (req, res) => {
+    console.log(req.params.id);
+
+    return res.json(req.body);
+  },
+  (req, res) => {
+    console.log(req.params.id);
+
+    return res.json(req.body);
+  }
+);
 
 router.get("/cookies", (req, res) => {
   console.log(req.header);
