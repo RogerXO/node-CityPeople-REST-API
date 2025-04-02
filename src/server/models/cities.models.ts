@@ -1,3 +1,3 @@
-export interface ICities {
-  name: string
+export interface ICity {
+  name: string;
 }
