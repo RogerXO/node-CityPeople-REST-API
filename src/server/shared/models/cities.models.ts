@@ -3,5 +3,5 @@ export interface ICity {
 }
 
 export interface IPostQUery {
-  filter?: string
+  filter: string
 }

@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { citiesController, peopleController } from "../controllers";
+import { citiesController } from "../controllers";
 
 const router = Router();
 
@@ -11,8 +10,8 @@ router.get("/", (_: Request, res: Response) => {
 
 router.post(
   "/cities",
-  citiesController.createBodyValidator,
-  citiesController.createQueryValidator,
+  // citiesController.createBodyValidator,
+  citiesController.createValidation,
   citiesController.create
 );
 
