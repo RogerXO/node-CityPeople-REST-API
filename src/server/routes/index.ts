@@ -4,13 +4,14 @@ import { citiesController } from "../controllers";
 
 const router = Router();
 
-router.get("/", (_: Request, res: Response) => {
-  return res.send("Hello world");
-});
+router.get(
+  "/cities",
+  citiesController.getAllValidation,
+  citiesController.getAll
+);
 
 router.post(
   "/cities",
-  // citiesController.createBodyValidator,
   citiesController.createValidation,
   citiesController.create
 );
