@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { Request, Response } from "express";
 import { citiesController } from "../controllers";
 
 const router = Router();
@@ -10,10 +9,28 @@ router.get(
   citiesController.getAll
 );
 
+router.get(
+  "/cities/:id",
+  citiesController.getByIdValidation,
+  citiesController.getById
+);
+
 router.post(
   "/cities",
   citiesController.createValidation,
   citiesController.create
+);
+
+router.put(
+  "/cities/:id",
+  citiesController.updateByIdValidation,
+  citiesController.updateById
+);
+
+router.delete(
+  "/cities/:id",
+  citiesController.deleteByIdValidation,
+  citiesController.deleteById
 );
 
 export { router };

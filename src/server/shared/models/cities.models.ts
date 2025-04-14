@@ -1,9 +1,13 @@
-export interface CreateCityBody {
+export interface ICityCreateBodyProps {
   name: string;
 }
 
-export interface CityQueryProps {
+export interface ICityQueryProps {
   page?: number;
   limit?: number;
   name?: string;
+}
+
+export interface ICityParamsProps {
+  id?: number;
 }
