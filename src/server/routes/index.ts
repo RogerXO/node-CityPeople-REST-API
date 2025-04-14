@@ -1,19 +1,36 @@
 import { Router } from "express";
-import { StatusCodes } from "http-status-codes";
-import { Request, Response } from "express";
-import { citiesController, peopleController } from "../controllers";
+import { citiesController } from "../controllers";
 
 const router = Router();
 
-router.get("/", (_: Request, res: Response) => {
-  return res.send("Hello world");
-});
+router.get(
+  "/cities",
+  citiesController.getAllValidation,
+  citiesController.getAll
+);
+
+router.get(
+  "/cities/:id",
+  citiesController.getByIdValidation,
+  citiesController.getById
+);
 
 router.post(
   "/cities",
-  citiesController.createBodyValidator,
-  citiesController.createQueryValidator,
+  citiesController.createValidation,
   citiesController.create
+);
+
+router.put(
+  "/cities/:id",
+  citiesController.updateByIdValidation,
+  citiesController.updateById
+);
+
+router.delete(
+  "/cities/:id",
+  citiesController.deleteByIdValidation,
+  citiesController.deleteById
 );
 
 export { router };
