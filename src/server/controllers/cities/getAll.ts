@@ -19,7 +19,13 @@ export async function getAll(
   req: Request<{}, {}, {}, ICityQueryProps>,
   res: Response
 ) {
-  console.log(req.query);
+  res.setHeader("access-control-expose-headers", "x-total-count");
+  res.setHeader("x-total-count", 1);
 
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+  return res.status(StatusCodes.OK).json([
+    {
+      id: 1,
+      name: "Belo Horizonte",
+    },
+  ]);
 }

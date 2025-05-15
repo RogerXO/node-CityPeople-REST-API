@@ -28,7 +28,12 @@ export async function updateById(
   req: Request<ICityParamsProps, {}, ICityCreateBodyProps>,
   res: Response
 ) {
-  console.log(req.params, req.body);
+  if (Number(req.params.id) === 99999)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: {
+        default: "City not found",
+      },
+    });
 
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+  return res.status(StatusCodes.NO_CONTENT).send();
 }

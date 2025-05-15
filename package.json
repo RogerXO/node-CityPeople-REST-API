@@ -7,17 +7,29 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "test": "jest",
+    "postinstall": "tsc",
+    "production": "node ./build/index.js"
   },
   "dependencies": {
+    "@types/jest": "^29.5.14",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "http-status-codes": "^2.3.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.3.2",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/supertest": "^6.0.3",
+    "supertest": "^7.1.0",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": "22.14"
   }
 }

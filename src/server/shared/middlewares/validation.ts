@@ -29,7 +29,7 @@ export const validation: TValidation = (schemas) => async (req, res, next) => {
     return next();
   } else {
     return res.status(StatusCodes.BAD_REQUEST).json({
-      erros: errorsResults,
+      errors: errorsResults,
     });
   }
 };

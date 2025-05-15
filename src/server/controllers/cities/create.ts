@@ -16,5 +16,5 @@ export async function create(
   req: Request<{}, {}, ICityCreateBodyProps>,
   res: Response
 ) {
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented");
+  return res.status(StatusCodes.CREATED).json(1);
 }
