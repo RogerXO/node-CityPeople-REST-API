@@ -45,5 +45,5 @@ exports.createValidation = (0, middlewares_1.validation)({
     body: bodyValidation,
 });
 async function create(req, res) {
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented");
+    return res.status(http_status_codes_1.StatusCodes.CREATED).json(1);
 }

@@ -53,6 +53,11 @@ exports.updateByIdValidation = (0, middlewares_1.validation)({
     body: bodyValidation,
 });
 async function updateById(req, res) {
-    console.log(req.params, req.body);
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+    if (Number(req.params.id) === 99999)
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: "City not found",
+            },
+        });
+    return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
 }

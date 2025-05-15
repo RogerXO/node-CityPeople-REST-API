@@ -26,7 +26,7 @@ const validation = (schemas) => async (req, res, next) => {
     }
     else {
         return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
-            erros: errorsResults,
+            errors: errorsResults,
         });
     }
 };

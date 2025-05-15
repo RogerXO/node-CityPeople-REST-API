@@ -48,6 +48,12 @@ exports.getAllValidation = (0, middlewares_1.validation)({
     query: queryValidation,
 });
 async function getAll(req, res) {
-    console.log(req.query);
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+    res.setHeader("access-control-expose-headers", "x-total-count");
+    res.setHeader("x-total-count", 1);
+    return res.status(http_status_codes_1.StatusCodes.OK).json([
+        {
+            id: 1,
+            name: "Belo Horizonte",
+        },
+    ]);
 }

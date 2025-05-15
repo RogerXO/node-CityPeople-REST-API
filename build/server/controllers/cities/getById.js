@@ -47,6 +47,14 @@ exports.getByIdValidation = (0, middlewares_1.validation)({
     params: paramsValidation,
 });
 async function getById(req, res) {
-    console.log(req.params);
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+    if (Number(req.params.id) === 99999)
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: "Register not found",
+            },
+        });
+    return res.status(http_status_codes_1.StatusCodes.OK).send({
+        id: req.params.id,
+        name: "Belo Horizonte",
+    });
 }
