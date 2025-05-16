@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
-import { ICityParamsProps } from "../../shared/models/cities.models";
+import { ICityParamsProps } from "../../shared/types/cities.models";
 import { StatusCodes } from "http-status-codes";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
-import { ICityQueryProps } from "../../shared/models/cities.models";
+import { ICityQueryProps } from "../../shared/types/cities.models";
 import { validation } from "../../shared/middlewares";
 import { utils } from "../../shared/services";
 
