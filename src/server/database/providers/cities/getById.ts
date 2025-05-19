@@ -1,11 +1,11 @@
 import { ICityParamsProps } from "../../../shared/types/cities.models";
-import { EtableNames } from "../../ETableNames";
+import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 import { ICidade } from "../../models";
 
 export async function getById(cityId: number): Promise<ICidade | Error> {
   try {
-    const result = await Knex<ICidade>(EtableNames.cidades)
+    const result = await Knex<ICidade>(EtableNames.cities)
       .select("*")
       .where("id", "=", cityId)
       .first();

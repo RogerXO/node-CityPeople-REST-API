@@ -1,9 +1,9 @@
-import { EtableNames } from "../../ETableNames";
+import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 
 export async function deleteById(cityId: number): Promise<void | Error> {
   try {
-    const result = await Knex(EtableNames.cidades)
+    const result = await Knex(EtableNames.cities)
       .where("id", "=", cityId)
       .del();
 

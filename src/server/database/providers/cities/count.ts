@@ -1,10 +1,10 @@
-import { EtableNames } from "../../ETableNames";
+import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 import { ICidade } from "../../models";
 
 export async function count(filter = "") {
   try {
-    const [{ count }] = await Knex<ICidade>(EtableNames.cidades)
+    const [{ count }] = await Knex<ICidade>(EtableNames.cities)
       .where("name", "like", `%${filter}%`)
       .count<[{ count: number }]>("* as count");
 

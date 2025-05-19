@@ -1,4 +1,4 @@
-import { EtableNames } from "../../ETableNames";
+import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 import { ICidade } from "../../models";
 
@@ -9,7 +9,7 @@ export async function getAll(
   id = 0
 ): Promise<ICidade[] | Error> {
   try {
-    const results = await Knex<ICidade>(EtableNames.cidades)
+    const results = await Knex<ICidade>(EtableNames.cities)
       .select("*")
       .where("id", Number(id))
       .orWhere("name", "like", `%${filterName}%`)
@@ -17,7 +17,7 @@ export async function getAll(
       .limit(limit);
 
     if (id > 0 && results.every((city) => city.id !== id)) {
-      const resultById = await Knex<ICidade>(EtableNames.cidades)
+      const resultById = await Knex<ICidade>(EtableNames.cities)
         .select("*")
         .where("id", "=", Number(id))
         .first();

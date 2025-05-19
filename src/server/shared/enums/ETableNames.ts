@@ -1,3 +1,3 @@
 export enum EtableNames {
-  cidades = "cidades",
+  cities = "cities",
 }

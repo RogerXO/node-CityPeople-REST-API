@@ -1,12 +1,12 @@
 import { ICityCreateBodyProps } from "../../../shared/types/cities.models";
-import { EtableNames } from "../../ETableNames";
+import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 
 export async function create(
   city: ICityCreateBodyProps
 ): Promise<number | Error> {
   try {
-    const [result] = await Knex(EtableNames.cidades)
+    const [result] = await Knex(EtableNames.cities)
       .insert(city)
       .returning("id");
 
