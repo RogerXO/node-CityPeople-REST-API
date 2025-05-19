@@ -6,6 +6,7 @@ import {
 import { validation } from "../../shared/middlewares";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -28,12 +29,25 @@ export async function updateById(
   req: Request<ICityParamsProps, {}, ICityCreateBodyProps>,
   res: Response
 ) {
-  if (Number(req.params.id) === 99999)
+  let result;
+  const id = req.params.id;
+
+  if (id) result = await citiesProvider.updateById(id, req.body);
+
+  // if (Number(req.params.id) === 99999)
+  //   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+  //     errors: {
+  //       default: "City not found",
+  //     },
+  //   });
+
+  if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: {
-        default: "City not found",
+        default: result.message,
       },
     });
+  }
 
   return res.status(StatusCodes.NO_CONTENT).send();
 }

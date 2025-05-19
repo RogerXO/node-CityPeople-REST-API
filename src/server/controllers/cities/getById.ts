@@ -3,6 +3,7 @@ import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
 import { ICityParamsProps } from "../../shared/types/cities.models";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -15,6 +16,18 @@ export const getByIdValidation = validation({
 });
 
 export async function getById(req: Request<ICityParamsProps>, res: Response) {
+  let result;
+
+  if (req.params.id) result = await citiesProvider.getById(req.params.id);
+
+  if (result instanceof Error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: {
+        default: result.message,
+      },
+    });
+  }
+
   if (Number(req.params.id) === 99999)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: {
@@ -22,8 +35,5 @@ export async function getById(req: Request<ICityParamsProps>, res: Response) {
       },
     });
 
-  return res.status(StatusCodes.OK).send({
-    id: req.params.id,
-    name: "Belo Horizonte",
-  });
+  return res.status(StatusCodes.OK).send(result);
 }

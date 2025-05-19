@@ -3,6 +3,7 @@ import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
 import { ICityParamsProps } from "../../shared/types/cities.models";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -18,12 +19,15 @@ export async function deleteById(
   req: Request<ICityParamsProps>,
   res: Response
 ) {
-  if (Number(req.params.id) === 99999)
+  const result = await citiesProvider.deleteById(req.params);
+
+  if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
       errors: {
-        default: "Register not found",
+        default: result.message,
       },
     });
+  }
 
   return res.status(StatusCodes.NO_CONTENT).send();
 }

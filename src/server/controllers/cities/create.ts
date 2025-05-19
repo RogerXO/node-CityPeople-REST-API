@@ -3,7 +3,7 @@ import { ICityCreateBodyProps } from "../../shared/types/cities.models";
 import * as yup from "yup";
 import { validation } from "../../shared/middlewares";
 import { StatusCodes } from "http-status-codes";
-import { citiesProvider } from "../../database/providers/cidades";
+import { citiesProvider } from "../../database/providers/cities";
 
 const bodyValidation: yup.ObjectSchema<ICityCreateBodyProps> = yup
   .object()

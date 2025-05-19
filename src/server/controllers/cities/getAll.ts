@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { ICityQueryProps } from "../../shared/types/cities.models";
 import { validation } from "../../shared/middlewares";
 import { utils } from "../../shared/services";
+import { citiesProvider } from "../../database/providers/cities";
 
 const queryValidation: yup.ObjectSchema<ICityQueryProps> = yup.object().shape({
   page: yup.number().optional().moreThan(0).default(utils.defaultPage),
@@ -20,12 +21,18 @@ export async function getAll(
   res: Response
 ) {
   res.setHeader("access-control-expose-headers", "x-total-count");
-  res.setHeader("x-total-count", 1);
+  res.setHeader("x-total-count", 0);
 
-  return res.status(StatusCodes.OK).json([
-    {
-      id: 1,
-      name: "Belo Horizonte",
-    },
-  ]);
+  const result = await citiesProvider.getAll();
+
+  if (result instanceof Error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: {
+        default: result.message,
+      },
+    });
+  }
+
+  res.setHeader("x-total-count", result.length);
+  return res.status(StatusCodes.OK).json(result);
 }

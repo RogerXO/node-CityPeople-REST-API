@@ -3,11 +3,11 @@ import { EtableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 
 export async function create(
-  cidade: ICityCreateBodyProps
+  city: ICityCreateBodyProps
 ): Promise<number | Error> {
   try {
     const [result] = await Knex(EtableNames.cidades)
-      .insert(cidade)
+      .insert(city)
       .returning("id");
 
     if (typeof result === "object") return result.id;
