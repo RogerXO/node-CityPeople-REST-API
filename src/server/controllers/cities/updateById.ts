@@ -29,17 +29,17 @@ export async function updateById(
   req: Request<ICityParamsProps, {}, ICityCreateBodyProps>,
   res: Response
 ) {
-  let result;
   const id = req.params.id;
 
-  if (id) result = await citiesProvider.updateById(id, req.body);
+  if (!id) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      erros: {
+        default: "O parâmetro 'id' precisa ser informado",
+      },
+    });
+  }
 
-  // if (Number(req.params.id) === 99999)
-  //   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-  //     errors: {
-  //       default: "City not found",
-  //     },
-  //   });
+  const result = await citiesProvider.updateById(id, req.body);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

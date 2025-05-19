@@ -8,7 +8,8 @@ export interface ICityUpdateBodyProps extends Omit<ICidade, "id"> {}
 export interface ICityQueryProps {
   page?: number;
   limit?: number;
-  name?: string;
+  filter?: string;
+  id?: number
 }
 
 export interface ICityParamsProps {

@@ -3,15 +3,14 @@ import { EtableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 import { ICidade } from "../../models";
 
-export async function getById(
-  cityId: number
-): Promise<ICidade | Error> {
+export async function getById(cityId: number): Promise<ICidade | Error> {
   try {
-    const result = await Knex.select()
-      .from<ICidade>(EtableNames.cidades)
-      .where("id", cityId);
+    const result = await Knex<ICidade>(EtableNames.cidades)
+      .select("*")
+      .where("id", "=", cityId)
+      .first();
 
-    if (result.length > 0) return result[0];
+    if (result) return result;
 
     return new Error("Esta cidade não existe no Banco de dados");
   } catch (error) {

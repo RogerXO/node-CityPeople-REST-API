@@ -1,15 +1,15 @@
-import { ICityParamsProps } from "../../../shared/types/cities.models";
 import { EtableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 
-export async function deleteById(
-  city: ICityParamsProps
-): Promise<number | Error> {
+export async function deleteById(cityId: number): Promise<void | Error> {
   try {
-    const result = await Knex(EtableNames.cidades).where("id", city.id).del();
-    console.log(result);
-    if (result) return result;
-    else return new Error("Erro ao deletar cidade inexistente!");
+    const result = await Knex(EtableNames.cidades)
+      .where("id", "=", cityId)
+      .del();
+
+    if (result > 0) return;
+
+    return new Error("Erro ao deletar cidade inexistente!");
   } catch (error) {
     console.log(error);
     return new Error("Erro ao deletar cidade!");

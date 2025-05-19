@@ -9,7 +9,8 @@ import { citiesProvider } from "../../database/providers/cities";
 const queryValidation: yup.ObjectSchema<ICityQueryProps> = yup.object().shape({
   page: yup.number().optional().moreThan(0).default(utils.defaultPage),
   limit: yup.number().optional().moreThan(0).default(utils.defaultLimit),
-  name: yup.string().optional(),
+  filter: yup.string().optional(),
+  id: yup.number().integer().optional().default(0),
 });
 
 export const getAllValidation = validation({
@@ -20,10 +21,13 @@ export async function getAll(
   req: Request<{}, {}, {}, ICityQueryProps>,
   res: Response
 ) {
-  res.setHeader("access-control-expose-headers", "x-total-count");
-  res.setHeader("x-total-count", 0);
-
-  const result = await citiesProvider.getAll();
+  const result = await citiesProvider.getAll(
+    req.query.page || utils.defaultPage,
+    req.query.limit || utils.defaultLimit,
+    req.query.filter || "",
+    Number(req.query.id)
+  );
+  const count = await citiesProvider.count(req.query.filter);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -31,8 +35,14 @@ export async function getAll(
         default: result.message,
       },
     });
+  } else if (count instanceof Error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+      errors: { default: count.message },
+    });
   }
 
-  res.setHeader("x-total-count", result.length);
+  res.setHeader("access-control-expose-headers", "x-total-count");
+  res.setHeader("x-total-count", count);
+
   return res.status(StatusCodes.OK).json(result);
 }

@@ -5,13 +5,13 @@ import { Knex } from "../../knex";
 export async function updateById(
   cityId: number,
   data: ICityUpdateBodyProps
-): Promise<number | Error> {
+): Promise<void | Error> {
   try {
     const result = await Knex(EtableNames.cidades)
       .where("id", cityId)
       .update(data);
 
-    if (typeof result === "number") return result;
+    if (result > 0) return;
 
     return new Error("Erro ao atualizar cidade inexistente");
   } catch (error) {

@@ -2,17 +2,32 @@ import { EtableNames } from "../../ETableNames";
 import { Knex } from "../../knex";
 import { ICidade } from "../../models";
 
-export async function getAll(): Promise<ICidade[] | Error> {
+export async function getAll(
+  page: number,
+  limit: number,
+  filterName: string,
+  id = 0
+): Promise<ICidade[] | Error> {
   try {
-    const result = await Knex.select().from<ICidade>(EtableNames.cidades);
+    const results = await Knex<ICidade>(EtableNames.cidades)
+      .select("*")
+      .where("id", Number(id))
+      .orWhere("name", "like", `%${filterName}%`)
+      .offset((page - 1) * limit)
+      .limit(limit);
 
-    if (result.length) return result;
-    else
-      return new Error(
-        "Erro ao requisitar todas as cidades para o banco de dados"
-      );
+    if (id > 0 && results.every((city) => city.id !== id)) {
+      const resultById = await Knex<ICidade>(EtableNames.cidades)
+        .select("*")
+        .where("id", "=", Number(id))
+        .first();
+
+      if (resultById) return [...results, resultById];
+    }
+
+    return results;
   } catch (error) {
     console.log(error);
-    return new Error("Erro na requisição de cidades para o banco de dados");
+    return new Error("Erro ao carregar cidades");
   }
 }

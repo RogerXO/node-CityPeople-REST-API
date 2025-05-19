@@ -16,9 +16,17 @@ export const getByIdValidation = validation({
 });
 
 export async function getById(req: Request<ICityParamsProps>, res: Response) {
-  let result;
+  const id = req.params.id;
 
-  if (req.params.id) result = await citiesProvider.getById(req.params.id);
+  if (!id) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      erros: {
+        default: "O parâmetro 'id' precisa ser informado",
+      },
+    });
+  }
+
+  const result = await citiesProvider.getById(id);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
@@ -28,12 +36,5 @@ export async function getById(req: Request<ICityParamsProps>, res: Response) {
     });
   }
 
-  if (Number(req.params.id) === 99999)
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: "Register not found",
-      },
-    });
-
-  return res.status(StatusCodes.OK).send(result);
+  return res.status(StatusCodes.OK).json(result);
 }

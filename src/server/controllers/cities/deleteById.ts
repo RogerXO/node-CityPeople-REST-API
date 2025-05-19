@@ -19,7 +19,17 @@ export async function deleteById(
   req: Request<ICityParamsProps>,
   res: Response
 ) {
-  const result = await citiesProvider.deleteById(req.params);
+  const id = req.params.id;
+
+  if (!id) {
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      erros: {
+        default: "O parâmetro 'id' precisa ser informado",
+      },
+    });
+  }
+
+  const result = await citiesProvider.deleteById(id);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
