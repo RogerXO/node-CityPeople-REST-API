@@ -33,36 +33,16 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getByIdValidation = void 0;
-exports.getById = getById;
-const middlewares_1 = require("../../shared/middlewares");
-const yup = __importStar(require("yup"));
-const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
-const paramsValidation = yup
-    .object()
-    .shape({
-    id: yup.number().integer().required().moreThan(0),
-});
-exports.getByIdValidation = (0, middlewares_1.validation)({
-    params: paramsValidation,
-});
-async function getById(req, res) {
-    const id = req.params.id;
-    if (!id) {
-        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
-            erros: {
-                default: "O parâmetro 'id' precisa ser informado",
-            },
-        });
-    }
-    const result = await cities_1.citiesProvider.getById(id);
-    if (result instanceof Error) {
-        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
-            errors: {
-                default: result.message,
-            },
-        });
-    }
-    return res.status(http_status_codes_1.StatusCodes.OK).json(result);
-}
+exports.citiesController = void 0;
+const create = __importStar(require("./create"));
+const getAll = __importStar(require("./getAll"));
+const getById = __importStar(require("./getById"));
+const updateById = __importStar(require("./updateById"));
+const deleteById = __importStar(require("./deleteById"));
+exports.citiesController = {
+    ...create,
+    ...getAll,
+    ...getById,
+    ...updateById,
+    ...deleteById
+};

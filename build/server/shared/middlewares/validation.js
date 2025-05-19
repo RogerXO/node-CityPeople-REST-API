@@ -5,8 +5,6 @@ const http_status_codes_1 = require("http-status-codes");
 const validation = (schemas) => async (req, res, next) => {
     const errorsResults = {};
     Object.entries(schemas).forEach(([key, schema]) => {
-        // const key = item[0];
-        // const schema = item[1];
         try {
             schema.validateSync(req[key], { abortEarly: false });
         }

@@ -38,6 +38,7 @@ exports.updateById = updateById;
 const yup = __importStar(require("yup"));
 const middlewares_1 = require("../../shared/middlewares");
 const http_status_codes_1 = require("http-status-codes");
+const cities_1 = require("../../database/providers/cities");
 const paramsValidation = yup
     .object()
     .shape({
@@ -53,11 +54,21 @@ exports.updateByIdValidation = (0, middlewares_1.validation)({
     body: bodyValidation,
 });
 async function updateById(req, res) {
-    if (Number(req.params.id) === 99999)
-        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
-            errors: {
-                default: "City not found",
+    const id = req.params.id;
+    if (!id) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            erros: {
+                default: "O parâmetro 'id' precisa ser informado",
             },
         });
+    }
+    const result = await cities_1.citiesProvider.updateById(id, req.body);
+    if (result instanceof Error) {
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: result.message,
+            },
+        });
+    }
     return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
 }

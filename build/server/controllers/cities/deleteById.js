@@ -38,6 +38,7 @@ exports.deleteById = deleteById;
 const middlewares_1 = require("../../shared/middlewares");
 const yup = __importStar(require("yup"));
 const http_status_codes_1 = require("http-status-codes");
+const cities_1 = require("../../database/providers/cities");
 const paramsValidation = yup
     .object()
     .shape({
@@ -47,11 +48,21 @@ exports.deleteByIdValidation = (0, middlewares_1.validation)({
     params: paramsValidation,
 });
 async function deleteById(req, res) {
-    if (Number(req.params.id) === 99999)
-        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
-            errors: {
-                default: "Register not found",
+    const id = req.params.id;
+    if (!id) {
+        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
+            erros: {
+                default: "O parâmetro 'id' precisa ser informado",
             },
         });
+    }
+    const result = await cities_1.citiesProvider.deleteById(id);
+    if (result instanceof Error) {
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: result.message,
+            },
+        });
+    }
     return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
 }
