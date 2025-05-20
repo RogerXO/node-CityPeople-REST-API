@@ -1,11 +1,11 @@
 import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
-import { ICidade } from "../../models";
+import { ICity } from "../../models";
 
-export async function count(filter = "") {
+export async function count(filterName = "") {
   try {
-    const [{ count }] = await Knex<ICidade>(EtableNames.cities)
-      .where("name", "like", `%${filter}%`)
+    const [{ count }] = await Knex<ICity>(EtableNames.cities)
+      .where("name", "like", `%${filterName}%`)
       .count<[{ count: number }]>("* as count");
 
     if (Number.isInteger(Number(count))) return Number(count);

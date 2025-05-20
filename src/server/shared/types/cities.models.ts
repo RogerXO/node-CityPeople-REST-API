@@ -1,15 +1,15 @@
 import { Extension } from "typescript";
-import { ICidade } from "../../database/models";
+import { ICity } from "../../database/models";
 
-export interface ICityCreateBodyProps extends Omit<ICidade, "id"> {}
+export interface ICityCreateBodyProps extends Omit<ICity, "id"> {}
 
-export interface ICityUpdateBodyProps extends Omit<ICidade, "id"> {}
+export interface ICityUpdateBodyProps extends Omit<ICity, "id"> {}
 
 export interface ICityQueryProps {
   page?: number;
   limit?: number;
-  filter?: string;
-  id?: number
+  filterName?: string;
+  id?: number;
 }
 
 export interface ICityParamsProps {

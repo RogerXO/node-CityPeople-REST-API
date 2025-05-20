@@ -9,7 +9,7 @@ import { citiesProvider } from "../../database/providers/cities";
 const queryValidation: yup.ObjectSchema<ICityQueryProps> = yup.object().shape({
   page: yup.number().optional().moreThan(0).default(utils.defaultPage),
   limit: yup.number().optional().moreThan(0).default(utils.defaultLimit),
-  filter: yup.string().optional(),
+  filterName: yup.string().optional(),
   id: yup.number().integer().optional().default(0),
 });
 
@@ -24,10 +24,10 @@ export async function getAll(
   const result = await citiesProvider.getAll(
     req.query.page || utils.defaultPage,
     req.query.limit || utils.defaultLimit,
-    req.query.filter || "",
+    req.query.filterName || "",
     Number(req.query.id)
   );
-  const count = await citiesProvider.count(req.query.filter);
+  const count = await citiesProvider.count(req.query.filterName);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
