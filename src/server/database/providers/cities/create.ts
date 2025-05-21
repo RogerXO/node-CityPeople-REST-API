@@ -1,17 +1,17 @@
-import { ICityCreateBodyProps } from "../../../shared/types/cities.models";
+import { ICityCreateBodyProps } from "../../../shared/types/cities";
 import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
+import { ICity } from "../../models";
 
 export async function create(
   city: ICityCreateBodyProps
 ): Promise<number | Error> {
   try {
-    const [result] = await Knex(EtableNames.cities)
+    const [result] = await Knex<ICity>(EtableNames.cities)
       .insert(city)
       .returning("id");
 
-    if (typeof result === "object") return result.id;
-    else if (typeof result === "number") return result;
+    if (result.id) return result.id;
 
     return new Error("Erro ao criar cidade no banco");
   } catch (error) {

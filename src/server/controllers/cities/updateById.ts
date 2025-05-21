@@ -2,7 +2,7 @@ import * as yup from "yup";
 import {
   ICityCreateBodyProps,
   ICityParamsProps,
-} from "../../shared/types/cities.models";
+} from "../../shared/types/cities";
 import { validation } from "../../shared/middlewares";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICityCreateBodyProps } from "../../shared/types/cities.models";
+import { ICityCreateBodyProps } from "../../shared/types/cities";
 import * as yup from "yup";
 import { validation } from "../../shared/middlewares";
 import { StatusCodes } from "http-status-codes";

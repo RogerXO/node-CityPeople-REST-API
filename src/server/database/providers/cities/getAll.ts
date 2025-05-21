@@ -1,10 +1,11 @@
 import { EtableNames } from "../../../shared/enums/ETableNames";
+import { utils } from "../../../shared/services";
 import { Knex } from "../../knex";
 import { ICity } from "../../models";
 
 export async function getAll(
-  page: number,
-  limit: number,
+  page = utils.defaultPage,
+  limit = utils.defaultLimit,
   filterName: string,
   id = 0
 ): Promise<ICity[] | Error> {

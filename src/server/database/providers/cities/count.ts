@@ -15,6 +15,8 @@ export async function count(filterName = "") {
     );
   } catch (error) {
     console.log(error);
-    return new Error("Erro ao consultar a quantidade total de registros");
+    return new Error(
+      "Erro ao consultar a quantidade total de cidades no banco de dados"
+    );
   }
 }

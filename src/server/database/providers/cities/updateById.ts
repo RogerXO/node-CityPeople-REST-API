@@ -1,4 +1,4 @@
-import { ICityUpdateBodyProps } from "../../../shared/types/cities.models";
+import { ICityUpdateBodyProps } from "../../../shared/types/cities";
 import { EtableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 

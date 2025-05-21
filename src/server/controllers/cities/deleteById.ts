@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
-import { ICityParamsProps } from "../../shared/types/cities.models";
+import { ICityParamsProps } from "../../shared/types/cities";
 import { StatusCodes } from "http-status-codes";
 import { citiesProvider } from "../../database/providers/cities";
 
