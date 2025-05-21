@@ -1,15 +1,15 @@
-import { Request, Response } from "express";
-import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
-import { ICityParamsProps } from "../../shared/types/cities";
+import { IPersonParamsProps } from "../../shared/types/people";
+import { validation } from "../../shared/middlewares";
+import { Request, Response } from "express";
+import { peopleProvider } from "../../database/providers/people";
 import { StatusCodes } from "http-status-codes";
-import { citiesProvider } from "../../database/providers/cities";
 import { utils } from "../../shared/services";
 
-const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
+const paramsValidation: yup.ObjectSchema<IPersonParamsProps> = yup
   .object()
   .shape({
-    id: yup.number().integer().required().moreThan(0),
+    id: yup.number().integer().moreThan(0).required(),
   });
 
 export const deleteByIdValidation = validation({
@@ -17,7 +17,7 @@ export const deleteByIdValidation = validation({
 });
 
 export async function deleteById(
-  req: Request<ICityParamsProps>,
+  req: Request<IPersonParamsProps, {}, {}>,
   res: Response
 ) {
   const id = req.params.id;
@@ -26,7 +26,7 @@ export async function deleteById(
     return utils.paramsIdIsRequiredErrorResponse();
   }
 
-  const result = await citiesProvider.deleteById(id);
+  const result = await peopleProvider.deleteById(id);
 
   if (result instanceof Error) {
     return utils.internalServerErrorResponse(result);

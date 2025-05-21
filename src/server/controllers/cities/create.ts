@@ -4,6 +4,7 @@ import * as yup from "yup";
 import { validation } from "../../shared/middlewares";
 import { StatusCodes } from "http-status-codes";
 import { citiesProvider } from "../../database/providers/cities";
+import { utils } from "../../shared/services";
 
 const bodyValidation: yup.ObjectSchema<ICityCreateBodyProps> = yup
   .object()
@@ -22,11 +23,7 @@ export async function create(
   const result = await citiesProvider.create(req.body);
 
   if (result instanceof Error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: result.message,
-      },
-    });
+    return utils.internalServerErrorResponse(result);
   }
 
   return res.status(StatusCodes.CREATED).json(result);

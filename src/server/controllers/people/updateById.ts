@@ -1,33 +1,35 @@
+import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
 import {
-  ICityUpdateBodyProps,
-  ICityParamsProps,
-} from "../../shared/types/cities";
-import { validation } from "../../shared/middlewares";
+  IPersonParamsProps,
+  IPersonUpdateBodyProps,
+} from "../../shared/types/people";
 import { Request, Response } from "express";
+import { peopleProvider } from "../../database/providers/people";
 import { StatusCodes } from "http-status-codes";
-import { citiesProvider } from "../../database/providers/cities";
 import { utils } from "../../shared/services";
 
-const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
+const paramsValidation: yup.ObjectSchema<IPersonParamsProps> = yup
   .object()
   .shape({
     id: yup.number().integer().required().moreThan(0),
   });
 
-const bodyValidation: yup.ObjectSchema<ICityUpdateBodyProps> = yup
+const bodyValidation: yup.ObjectSchema<IPersonUpdateBodyProps> = yup
   .object()
   .shape({
-    name: yup.string().required().min(3).max(60),
+    fullName: yup.string().required().min(2),
+    email: yup.string().required().email(),
+    cityId: yup.number().integer().moreThan(0).required(),
   });
 
-export const updateByIdValidation = validation({
+export const updateByIdvalidation = validation({
   params: paramsValidation,
   body: bodyValidation,
 });
 
 export async function updateById(
-  req: Request<ICityParamsProps, {}, ICityUpdateBodyProps>,
+  req: Request<IPersonParamsProps, {}, IPersonUpdateBodyProps>,
   res: Response
 ) {
   const id = req.params.id;
@@ -37,7 +39,7 @@ export async function updateById(
     return utils.paramsIdIsRequiredErrorResponse();
   }
 
-  const result = await citiesProvider.updateById(id, body);
+  const result = await peopleProvider.updateById(id, body);
 
   if (result instanceof Error) {
     return utils.internalServerErrorResponse(result);

@@ -1,2 +1,2 @@
 export * from "./cities";
-export * from "./people/@peopleController";
+export * from "./people";
