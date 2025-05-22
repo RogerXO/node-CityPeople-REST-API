@@ -1,12 +1,12 @@
 import * as yup from "yup";
 import { Request, Response } from "express";
 import { validation } from "../../shared/middlewares";
-import { IpersonQueryProps } from "../../shared/types/people";
+import { IPersonQueryProps } from "../../shared/types/people";
 import { utils } from "../../shared/services";
 import { peopleProvider } from "../../database/providers/people";
 import { StatusCodes } from "http-status-codes";
 
-const queryValidation: yup.ObjectSchema<IpersonQueryProps> = yup
+const queryValidation: yup.ObjectSchema<IPersonQueryProps> = yup
   .object()
   .shape({
     page: yup.number().optional().moreThan(0).default(utils.defaultPage),
@@ -19,7 +19,7 @@ export const getAllValidation = validation({
 });
 
 export async function getAll(
-  req: Request<{}, {}, {}, IpersonQueryProps>,
+  req: Request<{}, {}, {}, IPersonQueryProps>,
   res: Response
 ) {
   const query = req.query;

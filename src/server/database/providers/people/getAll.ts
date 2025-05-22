@@ -1,6 +1,5 @@
-import { EtableNames } from "../../../shared/enums/ETableNames";
+import { ETableNames } from "../../../shared/enums/ETableNames";
 import { utils } from "../../../shared/services";
-import { IpersonQueryProps } from "../../../shared/types/people";
 import { Knex } from "../../knex";
 import { IPerson } from "../../models";
 
@@ -10,7 +9,7 @@ export async function getAll(
   nameFilter: string
 ): Promise<IPerson[] | Error> {
   try {
-    const results = await Knex<IPerson>(EtableNames.people)
+    const results = await Knex(ETableNames.people)
       .select("*")
       .where("fullName", "like", `%${nameFilter}%`)
       .offset((page - 1) * limit)

@@ -1,10 +1,9 @@
-import { EtableNames } from "../../../shared/enums/ETableNames";
+import { ETableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
-import { IPerson } from "../../models";
 
 export async function count(nameFilter: string): Promise<number | Error> {
   try {
-    const [{ count }] = await Knex<IPerson>(EtableNames.people)
+    const [{ count }] = await Knex(ETableNames.people)
       .where("fullName", "like", `%${nameFilter}%`)
       .count<[{ count: number }]>("* as count");
 

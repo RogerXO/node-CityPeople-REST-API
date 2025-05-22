@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { EtableNames } from "../../shared/enums/ETableNames";
+import { ETableNames } from "../../shared/enums/ETableNames";
 
 const acreCities = [
   "Acrelândia",
@@ -27,12 +27,12 @@ const acreCities = [
 ];
 
 export async function seed(knex: Knex) {
-  const [{ count }] = await knex(EtableNames.cities).count<[{ count: number }]>(
+  const [{ count }] = await knex(ETableNames.cities).count<[{ count: number }]>(
     "* as count"
   );
 
   if (!Number.isInteger(Number(count)) || Number(count) > 0) return;
 
   const citiesToInsert = acreCities.map((city) => ({ name: city }));
-  await knex(EtableNames.cities).insert(citiesToInsert);
+  await knex(ETableNames.cities).insert(citiesToInsert);
 }

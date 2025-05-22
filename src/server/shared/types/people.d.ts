@@ -4,7 +4,7 @@ export interface IPersonCreateBodyProps extends Omit<IPerson, "id"> {}
 
 export interface IPersonUpdateBodyProps extends Omit<IPerson, "id"> {}
 
-export interface IpersonQueryProps {
+export interface IPersonQueryProps {
   page?: number;
   limit?: number;
   nameFilter?: string;

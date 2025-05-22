@@ -1,5 +1,5 @@
 import { ICityUpdateBodyProps } from "../../../shared/types/cities";
-import { EtableNames } from "../../../shared/enums/ETableNames";
+import { ETableNames } from "../../../shared/enums/ETableNames";
 import { Knex } from "../../knex";
 
 export async function updateById(
@@ -7,7 +7,7 @@ export async function updateById(
   data: ICityUpdateBodyProps
 ): Promise<void | Error> {
   try {
-    const result = await Knex(EtableNames.cities)
+    const result = await Knex(ETableNames.cities)
       .where("id", cityId)
       .update(data);
 
