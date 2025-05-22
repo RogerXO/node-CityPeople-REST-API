@@ -30,11 +30,11 @@ export async function getAll(
   const count = await citiesProvider.count(req.query.filterName);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(result);
+    return utils.internalServerErrorResponse(res, result);
   }
 
   if (count instanceof Error) {
-    return utils.internalServerErrorResponse(count);
+    return utils.internalServerErrorResponse(res, count);
   }
 
   res.setHeader("access-control-expose-headers", "x-total-count");

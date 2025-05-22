@@ -20,13 +20,13 @@ export async function getById(req: Request<IPersonParamsProps>, res: Response) {
   const id = req.params.id;
 
   if (!id) {
-    return utils.paramsIdIsRequiredErrorResponse();
+    return utils.paramsIdIsRequiredErrorResponse(res);
   }
 
   const result = await peopleProvider.getById(id);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(result);
+    return utils.internalServerErrorResponse(res, result);
   }
 
   return res.status(StatusCodes.OK).json(result);

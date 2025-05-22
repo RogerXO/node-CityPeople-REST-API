@@ -23,7 +23,7 @@ const bodyValidation: yup.ObjectSchema<IPersonUpdateBodyProps> = yup
     cityId: yup.number().integer().moreThan(0).required(),
   });
 
-export const updateByIdvalidation = validation({
+export const updateByIdValidation = validation({
   params: paramsValidation,
   body: bodyValidation,
 });
@@ -36,13 +36,13 @@ export async function updateById(
   const body = req.body;
 
   if (!id) {
-    return utils.paramsIdIsRequiredErrorResponse();
+    return utils.paramsIdIsRequiredErrorResponse(res);
   }
 
   const result = await peopleProvider.updateById(id, body);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(result);
+    return utils.internalServerErrorResponse(res, result);
   }
 
   return res.status(StatusCodes.NO_CONTENT).send();

@@ -8,7 +8,6 @@ export interface IpersonQueryProps {
   page?: number;
   limit?: number;
   nameFilter?: string;
-  id?: number;
 }
 
 export interface IPersonParamsProps {

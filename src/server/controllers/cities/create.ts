@@ -23,7 +23,7 @@ export async function create(
   const result = await citiesProvider.create(req.body);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(result);
+    return utils.internalServerErrorResponse(res, result);
   }
 
   return res.status(StatusCodes.CREATED).json(result);

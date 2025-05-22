@@ -11,8 +11,7 @@ const queryValidation: yup.ObjectSchema<IpersonQueryProps> = yup
   .shape({
     page: yup.number().optional().moreThan(0).default(utils.defaultPage),
     limit: yup.number().optional().moreThan(0).default(utils.defaultLimit),
-    nameFilter: yup.string().optional(),
-    id: yup.number().integer().optional().default(0),
+    nameFilter: yup.string().optional().default(""),
   });
 
 export const getAllValidation = validation({
@@ -35,11 +34,11 @@ export async function getAll(
   const count = await peopleProvider.count(nameFilter);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(result);
+    return utils.internalServerErrorResponse(res, result);
   }
 
   if (count instanceof Error) {
-    return utils.internalServerErrorResponse(count);
+    return utils.internalServerErrorResponse(res, count);
   }
 
   res.setHeader("acess-control-expose-headers", "x-total-count");

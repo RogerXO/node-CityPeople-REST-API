@@ -25,7 +25,7 @@ export async function updateById(
 
     if (result > 0) return;
 
-    return new Error("Erro ao atualizar pessoa");
+    return new Error("Erro ao atualizar pessoa inexistente");
   } catch (error) {
     console.log(error);
     return new Error("Erro ao atualizar pessoa no banco de dados");
