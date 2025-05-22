@@ -21,7 +21,7 @@ export async function getAll(
   req: Request<{}, {}, {}, ICityQueryProps>,
   res: Response
 ) {
-  const result = await citiesProvider.getAll(
+  const cities = await citiesProvider.getAll(
     req.query.page || utils.defaultPage,
     req.query.limit || utils.defaultLimit,
     req.query.filterName || "",
@@ -29,16 +29,16 @@ export async function getAll(
   );
   const count = await citiesProvider.count(req.query.filterName);
 
-  if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+  if (cities instanceof Error) {
+    return utils.internalServerErrorResponse(res, cities.message);
   }
 
   if (count instanceof Error) {
-    return utils.internalServerErrorResponse(res, count);
+    return utils.internalServerErrorResponse(res, count.message);
   }
 
   res.setHeader("access-control-expose-headers", "x-total-count");
   res.setHeader("x-total-count", count);
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.OK).json(cities);
 }

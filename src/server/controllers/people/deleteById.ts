@@ -29,7 +29,7 @@ export async function deleteById(
   const result = await peopleProvider.deleteById(id);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+    return utils.internalServerErrorResponse(res, result.message);
   }
 
   return res.status(StatusCodes.NO_CONTENT).send();

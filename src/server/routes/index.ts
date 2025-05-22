@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { citiesController, peopleController } from "../controllers";
+import {
+  citiesController,
+  peopleController,
+  usersController,
+} from "../controllers";
 
 const router = Router();
 
@@ -9,25 +13,21 @@ router.get(
   citiesController.getAllValidation,
   citiesController.getAll
 );
-
 router.get(
   "/cities/:id",
   citiesController.getByIdValidation,
   citiesController.getById
 );
-
 router.post(
   "/cities",
   citiesController.createValidation,
   citiesController.create
 );
-
 router.put(
   "/cities/:id",
   citiesController.updateByIdValidation,
   citiesController.updateById
 );
-
 router.delete(
   "/cities/:id",
   citiesController.deleteByIdValidation,
@@ -59,6 +59,18 @@ router.delete(
   "/people/:id",
   peopleController.deleteByIdValidation,
   peopleController.deleteById
+);
+
+// SignIn / SignUp routes
+router.post(
+  "/signup",
+  usersController.signUpValidation,
+  usersController.signUp
+);
+router.post(
+  "/signin",
+  usersController.signInValidation,
+  usersController.signIn
 );
 
 export { router };

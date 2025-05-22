@@ -23,11 +23,11 @@ export async function getById(req: Request<IPersonParamsProps>, res: Response) {
     return utils.paramsIdIsRequiredErrorResponse(res);
   }
 
-  const result = await peopleProvider.getById(id);
+  const person = await peopleProvider.getById(id);
 
-  if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+  if (person instanceof Error) {
+    return utils.internalServerErrorResponse(res, person.message);
   }
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.OK).json(person);
 }

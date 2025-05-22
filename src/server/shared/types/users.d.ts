@@ -1,8 +1,10 @@
 import { IUser } from "../../database/models";
 
-export interface IUserCreateBodyProps extends Omit<IUser, "id"> {}
+export interface IUserSignUpBodyProps extends Omit<IUser, "id"> {}
 
 export interface IUserUpdateBodyProps extends Omit<IUser, "id"> {}
+
+export interface IUserSignInBodyProps extends Omit<IUser, "id" | "name"> {}
 
 export interface IUserQueryProps {
   page?: number;

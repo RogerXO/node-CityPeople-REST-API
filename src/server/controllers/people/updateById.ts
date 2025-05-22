@@ -42,7 +42,7 @@ export async function updateById(
   const result = await peopleProvider.updateById(id, body);
 
   if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+    return utils.internalServerErrorResponse(res, result.message);
   }
 
   return res.status(StatusCodes.NO_CONTENT).send();

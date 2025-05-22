@@ -25,7 +25,7 @@ export async function getAll(
   const query = req.query;
   const nameFilter = query.nameFilter || "";
 
-  const result = await peopleProvider.getAll(
+  const people = await peopleProvider.getAll(
     query.page || utils.defaultPage,
     query.limit || utils.defaultLimit,
     nameFilter
@@ -33,16 +33,16 @@ export async function getAll(
 
   const count = await peopleProvider.count(nameFilter);
 
-  if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+  if (people instanceof Error) {
+    return utils.internalServerErrorResponse(res, people.message);
   }
 
   if (count instanceof Error) {
-    return utils.internalServerErrorResponse(res, count);
+    return utils.internalServerErrorResponse(res, count.message);
   }
 
   res.setHeader("acess-control-expose-headers", "x-total-count");
   res.setHeader("x-total-count", count);
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.OK).json(people);
 }

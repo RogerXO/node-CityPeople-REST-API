@@ -1,9 +1,9 @@
 import { ETableNames } from "../../../shared/enums/ETableNames";
-import { IUserCreateBodyProps } from "../../../shared/types/users";
+import { IUserSignUpBodyProps } from "../../../shared/types/users";
 import { Knex } from "../../knex";
 
 export async function create(
-  user: IUserCreateBodyProps
+  user: IUserSignUpBodyProps
 ): Promise<number | Error> {
   try {
     const [result] = await Knex(ETableNames.users).insert(user).returning("id");

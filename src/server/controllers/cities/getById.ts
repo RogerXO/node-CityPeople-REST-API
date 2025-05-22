@@ -23,11 +23,11 @@ export async function getById(req: Request<ICityParamsProps>, res: Response) {
     return utils.paramsIdIsRequiredErrorResponse(res);
   }
 
-  const result = await citiesProvider.getById(id);
+  const city = await citiesProvider.getById(id);
 
-  if (result instanceof Error) {
-    return utils.internalServerErrorResponse(res, result);
+  if (city instanceof Error) {
+    return utils.internalServerErrorResponse(res, city.message);
   }
 
-  return res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.OK).json(city);
 }
