@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { testServer } from "../jest.setup";
 
 describe("Cities - DeleteById", () => {
-  it("Delete register", async () => {
+  it("Delete city", async () => {
     const createResponse = await testServer
       .post("/cities")
       .send({ name: "Belo Horizonte" });
@@ -16,7 +16,7 @@ describe("Cities - DeleteById", () => {
     expect(deleteResponse.statusCode).toEqual(StatusCodes.NO_CONTENT);
   });
 
-  it("Delete unexistent register", async () => {
+  it("Delete unexistent city", async () => {
     const res = await testServer.delete("/cities/99999").send();
 
     expect(res.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
