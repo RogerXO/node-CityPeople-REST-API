@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateById = updateById;
-const ETableNames_1 = require("../../ETableNames");
+const ETableNames_1 = require("../../../shared/enums/ETableNames");
 const knex_1 = require("../../knex");
 async function updateById(cityId, data) {
     try {
-        const result = await (0, knex_1.Knex)(ETableNames_1.EtableNames.cidades)
+        const result = await (0, knex_1.Knex)(ETableNames_1.ETableNames.cities)
             .where("id", cityId)
             .update(data);
         if (result > 0)

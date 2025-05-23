@@ -9,7 +9,12 @@ function startServer() {
 if (process.env.IS_LOCALHOST !== "true") {
     knex_1.Knex.migrate
         .latest()
-        .then(() => startServer())
+        .then(() => {
+        knex_1.Knex.seed
+            .run()
+            .then(() => startServer())
+            .catch(console.log);
+    })
         .catch(console.log);
 }
 else {

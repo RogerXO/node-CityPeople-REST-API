@@ -33,27 +33,36 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteByIdValidation = void 0;
-exports.deleteById = deleteById;
+exports.updateByIdValidation = void 0;
+exports.updateById = updateById;
 const middlewares_1 = require("../../shared/middlewares");
 const yup = __importStar(require("yup"));
+const people_1 = require("../../database/providers/people");
 const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
 const services_1 = require("../../shared/services");
 const paramsValidation = yup
     .object()
     .shape({
     id: yup.number().integer().required().moreThan(0),
 });
-exports.deleteByIdValidation = (0, middlewares_1.validation)({
-    params: paramsValidation,
+const bodyValidation = yup
+    .object()
+    .shape({
+    fullName: yup.string().required().min(2),
+    email: yup.string().required().email(),
+    cityId: yup.number().integer().moreThan(0).required(),
 });
-async function deleteById(req, res) {
+exports.updateByIdValidation = (0, middlewares_1.validation)({
+    params: paramsValidation,
+    body: bodyValidation,
+});
+async function updateById(req, res) {
     const id = req.params.id;
+    const body = req.body;
     if (!id) {
         return services_1.utils.paramsIdIsRequiredErrorResponse(res);
     }
-    const result = await cities_1.citiesProvider.deleteById(id);
+    const result = await people_1.peopleProvider.updateById(id, body);
     if (result instanceof Error) {
         return services_1.utils.internalServerErrorResponse(res, result.message);
     }

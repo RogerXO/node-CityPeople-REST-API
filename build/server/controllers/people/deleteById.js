@@ -35,15 +35,15 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteByIdValidation = void 0;
 exports.deleteById = deleteById;
-const middlewares_1 = require("../../shared/middlewares");
 const yup = __importStar(require("yup"));
+const middlewares_1 = require("../../shared/middlewares");
+const people_1 = require("../../database/providers/people");
 const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
 const services_1 = require("../../shared/services");
 const paramsValidation = yup
     .object()
     .shape({
-    id: yup.number().integer().required().moreThan(0),
+    id: yup.number().integer().moreThan(0).required(),
 });
 exports.deleteByIdValidation = (0, middlewares_1.validation)({
     params: paramsValidation,
@@ -53,7 +53,7 @@ async function deleteById(req, res) {
     if (!id) {
         return services_1.utils.paramsIdIsRequiredErrorResponse(res);
     }
-    const result = await cities_1.citiesProvider.deleteById(id);
+    const result = await people_1.peopleProvider.deleteById(id);
     if (result instanceof Error) {
         return services_1.utils.internalServerErrorResponse(res, result.message);
     }

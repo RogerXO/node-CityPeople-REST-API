@@ -33,29 +33,10 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteByIdValidation = void 0;
-exports.deleteById = deleteById;
-const middlewares_1 = require("../../shared/middlewares");
-const yup = __importStar(require("yup"));
-const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
-const services_1 = require("../../shared/services");
-const paramsValidation = yup
-    .object()
-    .shape({
-    id: yup.number().integer().required().moreThan(0),
-});
-exports.deleteByIdValidation = (0, middlewares_1.validation)({
-    params: paramsValidation,
-});
-async function deleteById(req, res) {
-    const id = req.params.id;
-    if (!id) {
-        return services_1.utils.paramsIdIsRequiredErrorResponse(res);
-    }
-    const result = await cities_1.citiesProvider.deleteById(id);
-    if (result instanceof Error) {
-        return services_1.utils.internalServerErrorResponse(res, result.message);
-    }
-    return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
-}
+exports.usersController = void 0;
+const signIn = __importStar(require("./signIn"));
+const signUp = __importStar(require("./signUp"));
+exports.usersController = {
+    ...signIn,
+    ...signUp
+};

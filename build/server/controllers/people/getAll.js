@@ -33,29 +33,35 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteByIdValidation = void 0;
-exports.deleteById = deleteById;
-const middlewares_1 = require("../../shared/middlewares");
+exports.getAllValidation = void 0;
+exports.getAll = getAll;
 const yup = __importStar(require("yup"));
-const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
+const middlewares_1 = require("../../shared/middlewares");
 const services_1 = require("../../shared/services");
-const paramsValidation = yup
+const people_1 = require("../../database/providers/people");
+const http_status_codes_1 = require("http-status-codes");
+const queryValidation = yup
     .object()
     .shape({
-    id: yup.number().integer().required().moreThan(0),
+    page: yup.number().optional().moreThan(0).default(services_1.utils.defaultPage),
+    limit: yup.number().optional().moreThan(0).default(services_1.utils.defaultLimit),
+    nameFilter: yup.string().optional().default(""),
 });
-exports.deleteByIdValidation = (0, middlewares_1.validation)({
-    params: paramsValidation,
+exports.getAllValidation = (0, middlewares_1.validation)({
+    query: queryValidation,
 });
-async function deleteById(req, res) {
-    const id = req.params.id;
-    if (!id) {
-        return services_1.utils.paramsIdIsRequiredErrorResponse(res);
+async function getAll(req, res) {
+    const query = req.query;
+    const nameFilter = query.nameFilter || "";
+    const people = await people_1.peopleProvider.getAll(query.page || services_1.utils.defaultPage, query.limit || services_1.utils.defaultLimit, nameFilter);
+    const count = await people_1.peopleProvider.count(nameFilter);
+    if (people instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, people.message);
     }
-    const result = await cities_1.citiesProvider.deleteById(id);
-    if (result instanceof Error) {
-        return services_1.utils.internalServerErrorResponse(res, result.message);
+    if (count instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, count.message);
     }
-    return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
+    res.setHeader("acess-control-expose-headers", "x-total-count");
+    res.setHeader("x-total-count", count);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(people);
 }

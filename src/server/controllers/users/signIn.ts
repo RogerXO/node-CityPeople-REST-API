@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 import { validation } from "../../shared/middlewares";
 import { StatusCodes } from "http-status-codes";
-import { utils } from "../../shared/services";
+import { passwordCrypto, utils } from "../../shared/services";
 import { IUserSignInBodyProps } from "../../shared/types/users";
 import { usersProvider } from "../../database/providers/users";
 
@@ -29,7 +29,12 @@ export async function signIn(
     return utils.unauthorizedErrorResponse(res);
   }
 
-  if (password !== user.password) {
+  const passwordMatch = await passwordCrypto.verifyPassword(
+    password,
+    user.password
+  );
+
+  if (!passwordMatch) {
     return utils.unauthorizedErrorResponse(res);
   }
 

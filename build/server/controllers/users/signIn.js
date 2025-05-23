@@ -33,29 +33,30 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteByIdValidation = void 0;
-exports.deleteById = deleteById;
-const middlewares_1 = require("../../shared/middlewares");
+exports.signInValidation = void 0;
+exports.signIn = signIn;
 const yup = __importStar(require("yup"));
+const middlewares_1 = require("../../shared/middlewares");
 const http_status_codes_1 = require("http-status-codes");
-const cities_1 = require("../../database/providers/cities");
 const services_1 = require("../../shared/services");
-const paramsValidation = yup
+const users_1 = require("../../database/providers/users");
+const bodyValidation = yup
     .object()
     .shape({
-    id: yup.number().integer().required().moreThan(0),
+    email: yup.string().email().required().min(5),
+    password: yup.string().required().min(6),
 });
-exports.deleteByIdValidation = (0, middlewares_1.validation)({
-    params: paramsValidation,
+exports.signInValidation = (0, middlewares_1.validation)({
+    body: bodyValidation,
 });
-async function deleteById(req, res) {
-    const id = req.params.id;
-    if (!id) {
-        return services_1.utils.paramsIdIsRequiredErrorResponse(res);
+async function signIn(req, res) {
+    const { email, password } = req.body;
+    const user = await users_1.usersProvider.getByEmail(email);
+    if (user instanceof Error) {
+        return services_1.utils.unauthorizedErrorResponse(res);
     }
-    const result = await cities_1.citiesProvider.deleteById(id);
-    if (result instanceof Error) {
-        return services_1.utils.internalServerErrorResponse(res, result.message);
+    if (password !== user.password) {
+        return services_1.utils.unauthorizedErrorResponse(res);
     }
-    return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
+    return res.status(http_status_codes_1.StatusCodes.OK).json({ accessToken: "teste.teste.teste" });
 }

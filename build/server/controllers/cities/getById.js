@@ -39,6 +39,7 @@ const middlewares_1 = require("../../shared/middlewares");
 const yup = __importStar(require("yup"));
 const http_status_codes_1 = require("http-status-codes");
 const cities_1 = require("../../database/providers/cities");
+const services_1 = require("../../shared/services");
 const paramsValidation = yup
     .object()
     .shape({
@@ -50,19 +51,11 @@ exports.getByIdValidation = (0, middlewares_1.validation)({
 async function getById(req, res) {
     const id = req.params.id;
     if (!id) {
-        return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({
-            erros: {
-                default: "O parâmetro 'id' precisa ser informado",
-            },
-        });
+        return services_1.utils.paramsIdIsRequiredErrorResponse(res);
     }
-    const result = await cities_1.citiesProvider.getById(id);
-    if (result instanceof Error) {
-        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
-            errors: {
-                default: result.message,
-            },
-        });
+    const city = await cities_1.citiesProvider.getById(id);
+    if (city instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, city.message);
     }
-    return res.status(http_status_codes_1.StatusCodes.OK).json(result);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(city);
 }

@@ -15,4 +15,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./cities"), exports);
-__exportStar(require("./people/@peopleController"), exports);
+__exportStar(require("./people"), exports);
+__exportStar(require("./users"), exports);
