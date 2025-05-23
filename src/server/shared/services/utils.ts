@@ -27,8 +27,14 @@ export function paramsIdIsRequiredErrorResponse(res: Response) {
     .json(defaultError("O parâmetro 'id' precisa ser informado"));
 }
 
-export function unauthorizedErrorResponse(res: Response) {
+export function loginErrorResponse(res: Response) {
   return res
     .status(StatusCodes.UNAUTHORIZED)
     .json(defaultError("Email ou senha são inválidos"));
+}
+
+export function unauthorizedErrorResponse(res: Response) {
+  return res
+    .status(StatusCodes.UNAUTHORIZED)
+    .json(defaultError("Não autenticado"));
 }

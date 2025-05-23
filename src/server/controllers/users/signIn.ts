@@ -26,7 +26,7 @@ export async function signIn(
   const user = await usersProvider.getByEmail(email);
 
   if (user instanceof Error) {
-    return utils.unauthorizedErrorResponse(res);
+    return utils.loginErrorResponse(res);
   }
 
   const passwordMatch = await passwordCrypto.verifyPassword(
@@ -35,7 +35,7 @@ export async function signIn(
   );
 
   if (!passwordMatch) {
-    return utils.unauthorizedErrorResponse(res);
+    return utils.loginErrorResponse(res);
   }
 
   return res.status(StatusCodes.OK).json({ accessToken: "teste.teste.teste" });
