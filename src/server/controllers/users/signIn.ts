@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import * as yup from "yup";
 import { validation } from "../../shared/middlewares";
 import { StatusCodes } from "http-status-codes";
-import { passwordCrypto, utils } from "../../shared/services";
+import { JWTService, passwordCrypto, utils } from "../../shared/services";
 import { IUserSignInBodyProps } from "../../shared/types/users";
 import { usersProvider } from "../../database/providers/users";
 
@@ -38,5 +38,13 @@ export async function signIn(
     return utils.loginErrorResponse(res);
   }
 
-  return res.status(StatusCodes.OK).json({ accessToken: "teste.teste.teste" });
+  const accessToken = JWTService.sign({ uid: user.id });
+
+  if (accessToken === "JWT_SECRET_NOT_FOUND")
+    return utils.internalServerErrorResponse(
+      res,
+      "Erro ao gerar token de acesso"
+    );
+
+  return res.status(StatusCodes.OK).json({ accessToken });
 }

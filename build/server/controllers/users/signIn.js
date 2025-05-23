@@ -53,10 +53,11 @@ async function signIn(req, res) {
     const { email, password } = req.body;
     const user = await users_1.usersProvider.getByEmail(email);
     if (user instanceof Error) {
-        return services_1.utils.unauthorizedErrorResponse(res);
+        return services_1.utils.loginErrorResponse(res);
     }
-    if (password !== user.password) {
-        return services_1.utils.unauthorizedErrorResponse(res);
+    const passwordMatch = await services_1.passwordCrypto.verifyPassword(password, user.password);
+    if (!passwordMatch) {
+        return services_1.utils.loginErrorResponse(res);
     }
     return res.status(http_status_codes_1.StatusCodes.OK).json({ accessToken: "teste.teste.teste" });
 }
