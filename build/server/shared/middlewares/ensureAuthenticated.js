@@ -11,9 +11,14 @@ const ensureAuthenticated = (req, res, next) => {
     if (type !== "Bearer") {
         return services_1.utils.unauthorizedErrorResponse(res);
     }
-    if (token !== "teste.teste.teste") {
+    const jwtData = services_1.JWTService.verify(token);
+    if (jwtData === "JWT_SECRET_NOT_FOUND") {
+        return services_1.utils.internalServerErrorResponse(res, "Erro ao verificiar o token");
+    }
+    if (jwtData === "INVALID_TOKEN") {
         return services_1.utils.unauthorizedErrorResponse(res);
     }
+    req.headers.userId = jwtData.uid.toString();
     return next();
 };
 exports.ensureAuthenticated = ensureAuthenticated;

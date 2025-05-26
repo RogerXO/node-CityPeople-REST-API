@@ -33,6 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordCrypto = exports.utils = void 0;
+exports.JWTService = exports.passwordCrypto = exports.utils = void 0;
 exports.utils = __importStar(require("./utils"));
 exports.passwordCrypto = __importStar(require("./passwordCrypto"));
+exports.JWTService = __importStar(require("./JWTService"));

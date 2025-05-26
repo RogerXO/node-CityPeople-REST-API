@@ -29,5 +29,19 @@ exports.test = {
     connection: ":memory:",
 };
 exports.production = {
-    ...exports.development,
+    client: "pg",
+    migrations: {
+        directory: path_1.default.resolve(__dirname, "..", "migrations"),
+    },
+    seeds: {
+        directory: path_1.default.resolve(__dirname, "..", "seeds"),
+    },
+    connection: {
+        host: process.env.DATABASE_HOST,
+        user: process.env.DATABASE_USER,
+        database: process.env.DATABASE_DATABASE,
+        password: process.env.DATABASE_PASSWORD,
+        port: Number(process.env.DATABASE_PORT || 5432),
+        ssl: { rejectUnauthorized: false },
+    },
 };

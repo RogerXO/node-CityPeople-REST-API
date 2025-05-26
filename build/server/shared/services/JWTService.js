@@ -33,34 +33,24 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.signInValidation = void 0;
-exports.signIn = signIn;
-const yup = __importStar(require("yup"));
-const middlewares_1 = require("../../shared/middlewares");
-const http_status_codes_1 = require("http-status-codes");
-const services_1 = require("../../shared/services");
-const users_1 = require("../../database/providers/users");
-const bodyValidation = yup
-    .object()
-    .shape({
-    email: yup.string().email().required().min(5),
-    password: yup.string().required().min(6),
-});
-exports.signInValidation = (0, middlewares_1.validation)({
-    body: bodyValidation,
-});
-async function signIn(req, res) {
-    const { email, password } = req.body;
-    const user = await users_1.usersProvider.getByEmail(email);
-    if (user instanceof Error) {
-        return services_1.utils.loginErrorResponse(res);
+exports.sign = sign;
+exports.verify = verify;
+const jwt = __importStar(require("jsonwebtoken"));
+function sign(data) {
+    if (!process.env.JWT_SECRET)
+        return "JWT_SECRET_NOT_FOUND";
+    return jwt.sign(data, process.env.JWT_SECRET, { expiresIn: "24h" });
+}
+function verify(token) {
+    if (!process.env.JWT_SECRET)
+        return "JWT_SECRET_NOT_FOUND";
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        if (typeof decoded === "string")
+            return "INVALID_TOKEN";
+        return decoded;
     }
-    const passwordMatch = await services_1.passwordCrypto.verifyPassword(password, user.password);
-    if (!passwordMatch) {
-        return services_1.utils.loginErrorResponse(res);
+    catch (error) {
+        return "INVALID_TOKEN";
     }
-    const accessToken = services_1.JWTService.sign({ uid: user.id });
-    if (accessToken === "JWT_SECRET_NOT_FOUND")
-        return services_1.utils.internalServerErrorResponse(res, "Erro ao gerar token de acesso");
-    return res.status(http_status_codes_1.StatusCodes.OK).json({ accessToken });
 }
