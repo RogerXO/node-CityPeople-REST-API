@@ -1,11 +1,13 @@
 import * as yup from "yup";
 import {
-  ICityCreateBodyProps,
+  ICityUpdateBodyProps,
   ICityParamsProps,
-} from "../../shared/models/cities.models";
+} from "../../shared/types/cities";
 import { validation } from "../../shared/middlewares";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
+import { utils } from "../../shared/services";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -13,7 +15,7 @@ const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
     id: yup.number().integer().required().moreThan(0),
   });
 
-const bodyValidation: yup.ObjectSchema<ICityCreateBodyProps> = yup
+const bodyValidation: yup.ObjectSchema<ICityUpdateBodyProps> = yup
   .object()
   .shape({
     name: yup.string().required().min(3).max(60),
@@ -25,15 +27,21 @@ export const updateByIdValidation = validation({
 });
 
 export async function updateById(
-  req: Request<ICityParamsProps, {}, ICityCreateBodyProps>,
+  req: Request<ICityParamsProps, {}, ICityUpdateBodyProps>,
   res: Response
 ) {
-  if (Number(req.params.id) === 99999)
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: "City not found",
-      },
-    });
+  const id = req.params.id;
+  const body = req.body;
+
+  if (!id) {
+    return utils.paramsIdIsRequiredErrorResponse(res);
+  }
+
+  const result = await citiesProvider.updateById(id, body);
+
+  if (result instanceof Error) {
+    return utils.internalServerErrorResponse(res, result.message);
+  }
 
   return res.status(StatusCodes.NO_CONTENT).send();
 }

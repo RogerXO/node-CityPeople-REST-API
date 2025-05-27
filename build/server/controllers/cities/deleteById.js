@@ -38,6 +38,8 @@ exports.deleteById = deleteById;
 const middlewares_1 = require("../../shared/middlewares");
 const yup = __importStar(require("yup"));
 const http_status_codes_1 = require("http-status-codes");
+const cities_1 = require("../../database/providers/cities");
+const services_1 = require("../../shared/services");
 const paramsValidation = yup
     .object()
     .shape({
@@ -47,6 +49,13 @@ exports.deleteByIdValidation = (0, middlewares_1.validation)({
     params: paramsValidation,
 });
 async function deleteById(req, res) {
-    console.log(req.params);
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+    const id = req.params.id;
+    if (!id) {
+        return services_1.utils.paramsIdIsRequiredErrorResponse(res);
+    }
+    const result = await cities_1.citiesProvider.deleteById(id);
+    if (result instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, result.message);
+    }
+    return res.status(http_status_codes_1.StatusCodes.NO_CONTENT).send();
 }

@@ -1,2 +1,3 @@
-export * from "./cities/@citiesController";
-export * from "./people/@peopleController";
+export * from "./cities";
+export * from "./people";
+export * from "./users";

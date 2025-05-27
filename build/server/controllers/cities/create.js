@@ -38,12 +38,20 @@ exports.create = create;
 const yup = __importStar(require("yup"));
 const middlewares_1 = require("../../shared/middlewares");
 const http_status_codes_1 = require("http-status-codes");
-const bodyValidation = yup.object().shape({
+const cities_1 = require("../../database/providers/cities");
+const services_1 = require("../../shared/services");
+const bodyValidation = yup
+    .object()
+    .shape({
     name: yup.string().required().min(3).max(60),
 });
 exports.createValidation = (0, middlewares_1.validation)({
     body: bodyValidation,
 });
 async function create(req, res) {
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented");
+    const result = await cities_1.citiesProvider.create(req.body);
+    if (result instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, result.message);
+    }
+    return res.status(http_status_codes_1.StatusCodes.CREATED).json(result);
 }

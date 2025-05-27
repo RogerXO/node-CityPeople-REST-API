@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import * as yup from "yup";
-import { ICityQueryProps } from "../../shared/models/cities.models";
+import { ICityQueryProps } from "../../shared/types/cities";
 import { validation } from "../../shared/middlewares";
 import { utils } from "../../shared/services";
+import { citiesProvider } from "../../database/providers/cities";
 
 const queryValidation: yup.ObjectSchema<ICityQueryProps> = yup.object().shape({
   page: yup.number().optional().moreThan(0).default(utils.defaultPage),
   limit: yup.number().optional().moreThan(0).default(utils.defaultLimit),
-  name: yup.string().optional(),
+  filterName: yup.string().optional(),
+  id: yup.number().integer().optional().default(0),
 });
 
 export const getAllValidation = validation({
@@ -19,13 +21,24 @@ export async function getAll(
   req: Request<{}, {}, {}, ICityQueryProps>,
   res: Response
 ) {
-  res.setHeader("access-control-expose-headers", "x-total-count");
-  res.setHeader("x-total-count", 1);
+  const cities = await citiesProvider.getAll(
+    req.query.page || utils.defaultPage,
+    req.query.limit || utils.defaultLimit,
+    req.query.filterName || "",
+    Number(req.query.id) || 0
+  );
+  const count = await citiesProvider.count(req.query.filterName);
 
-  return res.status(StatusCodes.OK).json([
-    {
-      id: 1,
-      name: "Belo Horizonte",
-    },
-  ]);
+  if (cities instanceof Error) {
+    return utils.internalServerErrorResponse(res, cities.message);
+  }
+
+  if (count instanceof Error) {
+    return utils.internalServerErrorResponse(res, count.message);
+  }
+
+  res.setHeader("access-control-expose-headers", "x-total-count");
+  res.setHeader("x-total-count", count);
+
+  return res.status(StatusCodes.OK).json(cities);
 }

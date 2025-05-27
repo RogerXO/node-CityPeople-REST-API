@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
-import { ICityParamsProps } from "../../shared/models/cities.models";
+import { ICityParamsProps } from "../../shared/types/cities";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
+import { utils } from "../../shared/services";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -18,12 +20,17 @@ export async function deleteById(
   req: Request<ICityParamsProps>,
   res: Response
 ) {
-  if (Number(req.params.id) === 99999)
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: "Register not found",
-      },
-    });
+  const id = req.params.id;
+
+  if (!id) {
+    return utils.paramsIdIsRequiredErrorResponse(res);
+  }
+
+  const result = await citiesProvider.deleteById(id);
+
+  if (result instanceof Error) {
+    return utils.internalServerErrorResponse(res, result.message);
+  }
 
   return res.status(StatusCodes.NO_CONTENT).send();
 }

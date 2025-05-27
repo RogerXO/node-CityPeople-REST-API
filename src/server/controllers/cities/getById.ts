@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
 import { validation } from "../../shared/middlewares";
 import * as yup from "yup";
-import { ICityParamsProps } from "../../shared/models/cities.models";
+import { ICityParamsProps } from "../../shared/types/cities";
 import { StatusCodes } from "http-status-codes";
+import { citiesProvider } from "../../database/providers/cities";
+import { utils } from "../../shared/services";
 
 const paramsValidation: yup.ObjectSchema<ICityParamsProps> = yup
   .object()
@@ -15,15 +17,17 @@ export const getByIdValidation = validation({
 });
 
 export async function getById(req: Request<ICityParamsProps>, res: Response) {
-  if (Number(req.params.id) === 99999)
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      errors: {
-        default: "Register not found",
-      },
-    });
+  const id = req.params.id;
 
-  return res.status(StatusCodes.OK).send({
-    id: req.params.id,
-    name: "Belo Horizonte",
-  });
+  if (!id) {
+    return utils.paramsIdIsRequiredErrorResponse(res);
+  }
+
+  const city = await citiesProvider.getById(id);
+
+  if (city instanceof Error) {
+    return utils.internalServerErrorResponse(res, city.message);
+  }
+
+  return res.status(StatusCodes.OK).json(city);
 }

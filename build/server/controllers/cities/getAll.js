@@ -39,15 +39,26 @@ const http_status_codes_1 = require("http-status-codes");
 const yup = __importStar(require("yup"));
 const middlewares_1 = require("../../shared/middlewares");
 const services_1 = require("../../shared/services");
+const cities_1 = require("../../database/providers/cities");
 const queryValidation = yup.object().shape({
     page: yup.number().optional().moreThan(0).default(services_1.utils.defaultPage),
     limit: yup.number().optional().moreThan(0).default(services_1.utils.defaultLimit),
-    name: yup.string().optional(),
+    filterName: yup.string().optional(),
+    id: yup.number().integer().optional().default(0),
 });
 exports.getAllValidation = (0, middlewares_1.validation)({
     query: queryValidation,
 });
 async function getAll(req, res) {
-    console.log(req.query);
-    return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send("Not implemented!");
+    const cities = await cities_1.citiesProvider.getAll(req.query.page || services_1.utils.defaultPage, req.query.limit || services_1.utils.defaultLimit, req.query.filterName || "", Number(req.query.id) || 0);
+    const count = await cities_1.citiesProvider.count(req.query.filterName);
+    if (cities instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, cities.message);
+    }
+    if (count instanceof Error) {
+        return services_1.utils.internalServerErrorResponse(res, count.message);
+    }
+    res.setHeader("access-control-expose-headers", "x-total-count");
+    res.setHeader("x-total-count", count);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(cities);
 }
