@@ -6,6 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Knex = void 0;
 const knex_1 = __importDefault(require("knex"));
 const Environment_1 = require("./Environment");
+const pg_1 = __importDefault(require("pg"));
+require("dotenv/config");
+if (process.env.NODE_ENV === "production") {
+    pg_1.default.types.setTypeParser(20, "text", parseInt);
+}
 function getEnvironment() {
     switch (process.env.NODE_ENV) {
         case "production":

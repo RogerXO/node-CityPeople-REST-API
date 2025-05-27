@@ -50,7 +50,7 @@ exports.getAllValidation = (0, middlewares_1.validation)({
     query: queryValidation,
 });
 async function getAll(req, res) {
-    const cities = await cities_1.citiesProvider.getAll(req.query.page || services_1.utils.defaultPage, req.query.limit || services_1.utils.defaultLimit, req.query.filterName || "", Number(req.query.id));
+    const cities = await cities_1.citiesProvider.getAll(req.query.page || services_1.utils.defaultPage, req.query.limit || services_1.utils.defaultLimit, req.query.filterName || "", Number(req.query.id) || 0);
     const count = await cities_1.citiesProvider.count(req.query.filterName);
     if (cities instanceof Error) {
         return services_1.utils.internalServerErrorResponse(res, cities.message);
